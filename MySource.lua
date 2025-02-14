@@ -352,23 +352,20 @@ local function MakeDrag(Instance)
         
         local DragStart, StartPos
         
-        -- Funktion zum Aktualisieren der Position der GUI basierend auf der Maus
         local function UpdatePosition(Input)
             local delta = Input.Position - DragStart
             local Position = UDim2.new(StartPos.X.Scale, StartPos.X.Offset + delta.X / UIScale, StartPos.Y.Scale, StartPos.Y.Offset + delta.Y / UIScale)
-            Instance.Position = Position  -- Direktes Setzen der Position
+            Instance.Position = Position
         end
         
-        -- Event beim Starten des Ziehens (Maus gedrückt halten)
         Instance.InputBegan:Connect(function(Input)
             if Input.UserInputType == Enum.UserInputType.MouseButton1 then
-                StartPos = Instance.Position  -- Speichern der Startposition der UI
-                DragStart = Input.Position  -- Speichern der Startposition der Maus
+                StartPos = Instance.Position
+                DragStart = Input.Position
 
-                -- Während die Maustaste gedrückt ist, wird die Position der UI aktualisiert
                 UserInputService.InputChanged:Connect(function(InputChanged)
                     if InputChanged.UserInputType == Enum.UserInputType.MouseMovement and UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) then
-                        UpdatePosition(InputChanged)  -- Update der Position der UI
+                        UpdatePosition(InputChanged)
                     end
                 end)
             end
