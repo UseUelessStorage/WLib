@@ -356,7 +356,7 @@ local function MakeDrag(Instance)
 			local delta = Input.Position - DragStart
 			local Position = UDim2.new(StartPos.X.Scale, StartPos.X.Offset + delta.X / UIScale, StartPos.Y.Scale, StartPos.Y.Offset + delta.Y / UIScale)
 			-- Instance.Position = Position
-			CreateTween({Instance, "Position", Position, 0.01})
+			CreateTween({Instance, "Position", Position, 1})
 		end
 		
 		Instance.MouseButton1Down:Connect(function()
