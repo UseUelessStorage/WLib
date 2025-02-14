@@ -353,21 +353,22 @@ local function MakeDrag(Instance)
         local DragStart, StartPos
         
         -- Funktion zum Aktualisieren der Position der GUI basierend auf der Maus
-        local function Update(Input)
+        local function UpdatePosition(Input)
             local delta = Input.Position - DragStart
             local Position = UDim2.new(StartPos.X.Scale, StartPos.X.Offset + delta.X / UIScale, StartPos.Y.Scale, StartPos.Y.Offset + delta.Y / UIScale)
-            CreateTween({Instance, "Position", Position, 0.1})  -- Schnelle Übergangszeit
+            Instance.Position = Position  -- Direktes Setzen der Position
         end
         
+        -- Event beim Starten des Ziehens (Maus gedrückt halten)
         Instance.InputBegan:Connect(function(Input)
-            if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
-                StartPos = Instance.Position  -- Startposition der GUI speichern
-                DragStart = Input.Position  -- Mausposition speichern
-                
-                -- Ziehe die GUI während der Maustaste gedrückt gehalten wird
+            if Input.UserInputType == Enum.UserInputType.MouseButton1 then
+                StartPos = Instance.Position  -- Speichern der Startposition der UI
+                DragStart = Input.Position  -- Speichern der Startposition der Maus
+
+                -- Während die Maustaste gedrückt ist, wird die Position der UI aktualisiert
                 UserInputService.InputChanged:Connect(function(InputChanged)
                     if InputChanged.UserInputType == Enum.UserInputType.MouseMovement and UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) then
-                        Update(InputChanged)  -- Update der Position der GUI
+                        UpdatePosition(InputChanged)  -- Update der Position der UI
                     end
                 end)
             end
@@ -376,6 +377,7 @@ local function MakeDrag(Instance)
     
     return Instance
 end
+
 
 
 
