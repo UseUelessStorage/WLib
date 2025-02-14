@@ -350,35 +350,33 @@ local function MakeDrag(Instance)
             AutoButtonColor = false
         })
         
-        local DragStart, StartPos, InputOn
+        local DragStart, StartPos
         
+        -- Funktion zum Aktualisieren der Position der GUI basierend auf der Maus
         local function Update(Input)
             local delta = Input.Position - DragStart
             local Position = UDim2.new(StartPos.X.Scale, StartPos.X.Offset + delta.X / UIScale, StartPos.Y.Scale, StartPos.Y.Offset + delta.Y / UIScale)
-            CreateTween({Instance, "Position", Position, 0.35})
+            CreateTween({Instance, "Position", Position, 0.1})  -- Schnelle Übergangszeit
         end
-        
-        Instance.MouseButton1Down:Connect(function()
-            InputOn = true
-        end)
         
         Instance.InputBegan:Connect(function(Input)
             if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
-                StartPos = Instance.Position
-                DragStart = Input.Position
+                StartPos = Instance.Position  -- Startposition der GUI speichern
+                DragStart = Input.Position  -- Mausposition speichern
                 
-                while UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) do
-                    Update(Input)
-                    RunService.Heartbeat:Wait()
-                end
-                
-                InputOn = false
+                -- Ziehe die GUI während der Maustaste gedrückt gehalten wird
+                UserInputService.InputChanged:Connect(function(InputChanged)
+                    if InputChanged.UserInputType == Enum.UserInputType.MouseMovement and UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) then
+                        Update(InputChanged)  -- Update der Position der GUI
+                    end
+                end)
             end
         end)
     end)
     
     return Instance
 end
+
 
 
 local function VerifyTheme(Theme)
